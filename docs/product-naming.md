@@ -59,12 +59,43 @@ SQL и ограничения переименования: [ALTER DATABASE](htt
 
 ## Локальный PostgreSQL
 
-На ноутбуке `product_srv` занят прежней схемой с category/product_image,
-а рабочая схема product_type/type_product_field находится в `product_srv_v2`.
-Сначала сохранить legacy-базу под отдельным архивным именем, затем переименовать
-рабочую в `product_srv`. Не подменять текущую схему legacy-базой и не удалять данные.
-Пользователь локальной БД `admin` не переименовывается. Локальный `.env` переключать
-после переименования, отдельно от `.env` сохранённого `code/_service`.
+22 ноября 2026 старая локальная `product_srv` со схемой category/product_image
+удалена по прямому разрешению пользователя. Рабочая `product_srv_v2` со схемой
+product_type/type_product_field переименована в `product_srv`: OID сохранён,
+13 товаров и 19 вариантов остались на месте. Локальный `.env` переключён после
+переименования. Пользователь локальной БД `admin` не переименовывался.
 
 Старое имя остаётся только во входных условиях миграций и исторических отчётах;
 уже применённые миграции не переписываются.
+
+## Проверка dev, 22 ноября 2026
+
+Все шесть CI завершились успешно. Unit/build/publish выполнялись на GitHub,
+migrate/deploy — на одном общем `sellgar-dev`. Gateway не имеют migration job.
+
+| Приложение | Source | CI |
+|---|---|---|
+| Product | `e1c0f5f` | [44952203208](https://github.com/sellgar/sellgar.product.service/actions/runs/44952203208) |
+| Store | `c036747` | [44952218138](https://github.com/sellgar/sellgar.store.service/actions/runs/44952218138) |
+| Cart | `12045ed` | [44952230789](https://github.com/sellgar/sellgar.cart.service/actions/runs/44952230789) |
+| File | `2b8eff7` | [44952244252](https://github.com/sellgar/sellgar.file.service/actions/runs/44952244252) |
+| Admin gateway | `78ba1fb` | [44952257075](https://github.com/sellgar/sellgar.admin.gateway/actions/runs/44952257075) |
+| Client gateway | `171c279` | [44952270691](https://github.com/sellgar/sellgar.client.gateway/actions/runs/44952270691) |
+
+- Все шесть Deployment имеют по одной ready/updated/available реплике с этими SHA.
+- База сохранила OID 16654, роль — OID 16653. Сохранены 11 товаров, 26 вариантов
+  и 40 проекций изображений. Существующий личный пользователь `sellgar` читает базу.
+- Product outbox: 72 опубликованных события с новым producer. Store: 11 снимков
+  и 72 Product inbox-записи с новым producer. Cart: 71 Product inbox-запись с новым
+  producer; старых source.producer в Cart outbox нет.
+- Реальный RMQ getByUuid и Store catalog.synchronize через `product.commands`
+  возвращают существующий iPhone, UUID `20d243ba-4176-49d9-a832-e49405af2c12`, version 38.
+- Повторно доставлены обработанные Product и File события с сохранённой идентичностью.
+  Очереди после повтора пусты, Cart DLQ пуста. Хеши всех строк product/variant/image
+  совпали до и после: повтор не изменил данные.
+- Старые очереди удалены в dev и локальном RabbitMQ только с if-empty/if-unused.
+  Новые `product.commands` / `product.events` имеют по одному consumer.
+- Оба HTTPS gateway health, существующий storefront offer, изображение CDN и
+  главная страница витрины возвращают 200; изображение — image/webp.
+- Gateway возвращены к одной реплике; общий runner активен. Автоматическая
+  синхронизация Argo восстановлена: root, platform и SeaweedFS Synced/Healthy.
