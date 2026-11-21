@@ -20,7 +20,7 @@ spec:
       superuser: false
       passwordSecret:
         name: shop-database
-    - name: product_srv_v2
+    - name: product_srv
       ensure: present
       login: true
       superuser: false

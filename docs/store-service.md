@@ -17,7 +17,7 @@ retain reclaim policy сохраняет данные. Locale важна для 
 Пять миграций запускает Sync Job до Deployment; synchronize отключён.
 `.env` монтируется из ConfigMap `/app/.env`, пароли — Secret env refs.
 Очереди `store_srv.command.queue`, `store_srv.event.queue`; exchange event.exchange,
-каталог — product.v2.commands. Outbox подключён как общая библиотека процесса Store.
+каталог — product.commands. Outbox подключён как общая библиотека процесса Store.
 
 `/health` проверяет PostgreSQL и оба RMQ-consumer. Общий chart задаёт readiness,
 startup probe, RollingUpdate maxSurge 1/maxUnavailable 0, minReadySeconds и grace.

@@ -7,7 +7,9 @@ Product владеет `code/`, корневыми Dockerfile/CI и `helm/` valu
 
 ## Данные и конфигурация
 
-Это чистая база `product_srv_v2`, без импорта локальных товаров/справочников.
+Целевое имя базы и владельца — `product_srv`. При первом развёртывании база
+называлась `product_srv_v2`; переименование сохраняет её данные и права.
+Порядок согласованного перехода: [Product naming](product-naming.md).
 CloudNativePG создаёт одноимённую роль без superuser из Secret `product-database`.
 Database resource сохраняет данные через reclaim policy retain.
 Личный пользователь PostgreSQL и его права не изменяются.
@@ -20,9 +22,17 @@ Database resource сохраняет данные через reclaim policy reta
 При замене на содержащие URI-разделители потребуется кодирование credentials
 для существующего URL-контракта, без помещения пароля в ConfigMap.
 
-Очереди остаются `product.v2.commands` и `product.v2.events`, topic exchange —
+Имена очередей в конфигурации — `product.commands` и `product.events`, topic exchange —
 `event.exchange`. File events поступают в существующий inbox, исходящие полные
 снимки Product — через общую `@sellgar/outbox` в том же процессе.
+
+`PRODUCT_COMMAND_QUEUE` и `PRODUCT_EVENT_QUEUE` не содержат исторического `V2`.
+Store и Cart используют `PRODUCT_COMMAND_QUEUE`; оба gateway сохраняют свой ключ
+`AMQP_PRODUCT_SRV_COMMAND_QUEUE` со значением `product.commands`.
+При переходе работающей среды нужно согласованно переключить Product и клиентов.
+RabbitMQ не переименовывает очереди: старые очереди удаляют только после проверки
+отсутствия ready/unacknowledged сообщений и старых publishers/consumers. До этого
+File events из старой очереди должны быть обработаны, чтобы не потерять проекции.
 
 ## Проверки и обновление
 
