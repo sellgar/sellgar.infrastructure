@@ -10,6 +10,8 @@ resources:
 - rabbitmq.yaml
 - seaweedfs-s3-config.yaml
 - cart-database.yaml
+- order-database.yaml
+- payment-database.yaml
 - file-database.yaml
 - letsencrypt-issuer.yaml
 - website-certificate.yaml

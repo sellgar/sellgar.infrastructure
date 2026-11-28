@@ -44,6 +44,18 @@ spec:
       superuser: false
       passwordSecret:
         name: file-database
+    - name: order_srv
+      ensure: present
+      login: true
+      superuser: false
+      passwordSecret:
+        name: order-database
+    - name: payment_srv
+      ensure: present
+      login: true
+      superuser: false
+      passwordSecret:
+        name: payment-database
   bootstrap:
     initdb:
       database: socket_srv

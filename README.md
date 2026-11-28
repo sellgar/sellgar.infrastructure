@@ -55,6 +55,10 @@ Unit/build/publish работают на GitHub, migrate/deploy — на одн�
 Коммит в infrastructure на каждый выпуск приложения не нужен.
 Prod promotion выполняется вручную с проверенным digest, без пересборки.
 
+Для новых Order/Payment подготовлены DB/role/Secret definitions и service-owned
+deploy artifacts. Они ещё не развёрнуты; порядок первого включения —
+[checkout-services.md](docs/checkout-services.md).
+
 ## Доступ
 
 - Админка: `https://admin.dev.sellgar.ru`.

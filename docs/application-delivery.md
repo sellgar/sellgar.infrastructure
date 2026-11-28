@@ -29,6 +29,11 @@
 | Admin UI | admin-ui | нет |
 | Storefront | storefront | нет |
 
+Новые Order (`order-service`) и Payment (`payment-service`) подготовлены локально
+с отдельными migration images. Они ещё не развёрнуты и не включены в подтверждённые
+12 приложений выше. Предварительные доступы/БД и первый rollout:
+[checkout-services.md](checkout-services.md).
+
 Build, tests и publication работают на GitHub-hosted runners. Каждый репозиторий
 имеет Docker targets `application` и `tests`; только приложения с БД имеют `migration`.
 Media использует `node:test` для проверки выдачи изображений и storage events.
