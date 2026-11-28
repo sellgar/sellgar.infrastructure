@@ -21,6 +21,8 @@
 | Product | product-service | да |
 | Store | store-service | да |
 | Cart | cart-service | да |
+| Order | order-service | да |
+| Payment (тестовая интеграция) | payment-service | да |
 | File | file-service | да |
 | Socket gateway | socket-gateway | да: события и cursors в PostgreSQL |
 | Media | media-service | нет |
@@ -29,9 +31,9 @@
 | Admin UI | admin-ui | нет |
 | Storefront | storefront | нет |
 
-Новые Order (`order-service`) и Payment (`payment-service`) подготовлены локально
-с отдельными migration images. Они ещё не развёрнуты и не включены в подтверждённые
-12 приложений выше. Предварительные доступы/БД и первый rollout:
+Order (`order-service`) и Payment (`payment-service`) добавлены 28 ноября 2026:
+полный CI успешен, отдельные миграции применены, обе реплики готовы в dev.
+Теперь подтверждены 14 приложений. Доступы/БД и evidence первого rollout:
 [checkout-services.md](checkout-services.md).
 
 Build, tests и publication работают на GitHub-hosted runners. Каждый репозиторий

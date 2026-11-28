@@ -12,8 +12,9 @@
   JavaScript actions должны объявлять Node 24 или новее в собственном manifest;
   принудительный запуск устаревшего action на новом runtime не заменяет обновление.
   Переход работающей среды выполняется отдельно, с сохранением ресурсов:
-  `docs/product-delivery.md`. Все 12 dev-приложений переданы Helm CI;
+  `docs/product-delivery.md`. Все 14 dev-приложений работают под Helm CI;
   Argo CD управляет платформой. Компонентные jobs пока не включены.
+  Первый rollout Order/Payment: `docs/checkout-services.md`; Payment пока test.
   Репозиторий приложения хранит `helm/values.app.yaml` и
   `helm/<dev|prod>/values.yaml`, включая содержимое ConfigMap своей среды.
   Не копировать эти values в инфраструктурный репозиторий.

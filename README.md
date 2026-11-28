@@ -46,7 +46,7 @@ Ansible и CI его не вызывают.
 
 ## Доставка приложений
 
-Все 12 dev-приложений используют [общий CI-контракт](docs/application-delivery.md):
+Все 14 dev-приложений используют [общий CI-контракт](docs/application-delivery.md):
 unit → build → publish → migrate → deploy. Для приложений без БД migrate отсутствует.
 Юнит-тесты обязательны до сборки; компонентная job пока не включена.
 Unit/build/publish работают на GitHub, migrate/deploy — на одном общем runner `sellgar-dev`.
@@ -55,8 +55,8 @@ Unit/build/publish работают на GitHub, migrate/deploy — на одн�
 Коммит в infrastructure на каждый выпуск приложения не нужен.
 Prod promotion выполняется вручную с проверенным digest, без пересборки.
 
-Для новых Order/Payment подготовлены DB/role/Secret definitions и service-owned
-deploy artifacts. Они ещё не развёрнуты; порядок первого включения —
+Order/Payment развёрнуты с отдельными БД/ролями и проверены в dev; Payment использует
+тестовый адаптер. Порядок включения, CI и runtime evidence —
 [checkout-services.md](docs/checkout-services.md).
 
 ## Доступ
